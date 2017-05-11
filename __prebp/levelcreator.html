@@ -1,0 +1,510 @@
+ <!doctype html>
+ <html>
+ <head>
+	<title>Sprinkle Safari Level Creator</title>
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="icon" type="image/png" href="images/non-game/icons/icon.png" />
+	<script type="text/javascript" src="libraries/jquery.js"></script>		
+	<script type="text/javascript" src="libraries/jquery-ui/js/jquery-ui.js"></script>	
+	<link type="text/css" href="libraries/jquery-ui/css/ui-lightness/jquery-ui.css" rel="stylesheet" />			
+
+	<style type="text/css">
+		
+		table#background td{
+			border: 1px solid black;
+			margin: 0;
+			padding: 0;
+		}
+		
+		textarea{
+			font-size: 12px;
+			font-family: Consolas, "DejaVu Sans Mono", "Courier New", Courier, monospace;		
+		}
+		
+		#gridCode{
+			width: 120px;
+			height: 240px;
+		}
+		
+		#gridObjectCode{
+			width: 250px;
+			height: 200px;
+		}
+		
+		#enemyCode{
+			width: 230px;
+			height: 150px;
+		}
+		
+		#finalCode{
+			width: 350px;
+			height: 500px;
+		}
+		
+		td{
+			background: url('images/tiles/grass.png');
+		}
+		
+		td img{
+			margin: 0;
+			width: 80%;
+			height: 80%;
+		}
+		
+		.hidden{
+			display: none;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		var IMAGE_FOLDER = "images/";
+		var TILE_FOLDER ="images/tiles/";
+		var ANIMAL_FOLDER = "images/animals";
+		
+		 //tile abbreviations
+		 var GRASS = 'g';
+		 var PATH = 'p';
+		 var ROAD = 'r';
+		 var DIRT = 'd';
+		 var CONCRETE = 'c';
+		 var TILE = 't';
+		 var WOOD = 'w';
+		 var BRIDGE_NS = 'B';
+		 var BRIDGE_EW = 'b';
+		 var SNOW = 's';		
+		 var SAVANNAH = 'v';	
+		 var WATER = 'W';		 
+		
+		//full enemies list
+		var ENEMIES = [
+			'Squirrel',
+			'Cow',
+			'Pig',
+			'Sheep',
+			'Chicken',		
+			'Cat',
+			'Dog',		
+			
+			'---',
+			
+			'Penguin',
+			'Bear',
+			'Elk',	
+			'Owl',		
+			'Goat',	
+			'Duck',
+			'Beaver',		
+			
+			'---',
+			
+			'TRex',
+			'Triceratops',
+			'Plesiosaur',
+			'Pterodactyl',
+			'Brontosaurus',
+			'Bat',
+			'Ghost',
+			
+			'---',
+						
+			'Giraffe',
+			'Hippo',
+			'Rhino',
+			'Zebra',
+			'Leopard',		
+			'Gnu',	
+			'Monkey',		
+			
+			'---',
+						
+			'Llama',
+			'Peacock',
+			'Panda',
+			'Ostrich',	
+			'Bunny',
+			'Turkey',
+			'Mouse'			
+		];		
+		
+		var OBSTACLES = [
+			'bank',
+			'barrel',
+			'building',
+			'cave-wall',
+			'chair',
+			'hotel',
+			'house1',
+			'house2',
+			'house3',
+			'hydrant',
+			'shop',
+			'sign',
+			'tree',
+			'wall',
+			'water'
+		];
+		
+		var STEPPABLES = [
+			'flag',
+			'full-heart',
+			'half-heart',
+			'quarter-heart'
+		];
+		
+		var grid = new Array();
+		var finalGridCode;
+		var finalGridObjectCode;
+		var finalEnemyCode;
+			
+		$(document).ready(function(){
+			//aesthetics
+			$('button').button();
+			
+			//set up for grid creation
+			//initialize grid
+			for(var i=0; i<15; i++){
+				grid[i] = new Array();
+				for(var j=0; j<15; j++){
+					grid[i][j] = 'g';
+				}
+			}
+			$('#gridCode').html(toString(grid));	
+			
+			$('td').each(function(i,td){
+				var cell = $(td);
+				cell.attr('title',"x: " + getX(cell) + ", y: " + getY(cell));
+				cell.click(function(){
+					if(finalGridCode)
+						return; //because of a bug, clicking on a tile after you're done with tiles still calls this function
+					//change gridCode
+					var selected = $('#tileSelect').val();
+					var x = getX($(this));
+					var y = getY($(this));
+					setTile(x,y,selected);
+				});
+			});
+			$('#applyToAll').click(function(){
+				if(!confirm('Are you sure you want to apply this to all tiles?')) return;
+				//set all tiles to the chosen one
+				var selected = $('#tileSelect').val();
+				for(var x=0; x<15; x++){
+					for(var y=0; y<15; y++){
+						setTile(x,y,selected);
+					}
+				}
+			});
+			$('#tilesDone').click(function(){
+				if(!confirm('Are you sure you are done with tiles?')) return;
+				//save code in code box
+				finalGridCode = $('#gridCode').html();
+				startGridObjectPlacement();
+			});
+			
+			//load grid object selector dropdown
+			//add obstacles
+			var select = $('#gridObjectSelect');
+			for(var i=0; i<OBSTACLES.length; i++){
+				var option = $('<option></option');
+				option.html(OBSTACLES[i]);
+				select.append(option);
+			}	
+			//add separator
+			var option = $('<option></option>');
+			option.html('---');
+			select.append(option);
+			//add steppables
+			for(var i=0; i<STEPPABLES.length; i++){
+				var option = $('<option></option');
+				option.html(STEPPABLES[i]);
+				select.append(option);
+			}				
+	
+			//load enemy selector dropdown
+			var enemySelect = $('#enemySelect');
+			for(var i=0; i<ENEMIES.length; i++){
+				var option = $('<option></option');
+				option.html(ENEMIES[i]);
+				enemySelect.append(option);
+			}
+		});
+		
+		/**
+			Called when the user is ready to start placing grid objects.
+		*/
+		function startGridObjectPlacement(){
+			$('#tiles').addClass('hidden');
+			$('#gridObjects').removeClass('hidden');	
+			$('td').click(function(){
+				var selected = $('#gridObjectSelect').val();
+				
+				//determine if the selection was an obstacle or steppable
+				var type;
+				if(arrayContains(selected,OBSTACLES))
+					type = 'Obstacle';
+				else if(arrayContains(selected,STEPPABLES))
+					type = 'Steppable';
+				else
+					type = 'Obstacle'; //not found, use a default
+				
+				if(selected == '---') return; //user selected divider
+				var x = getX($(this));
+				var y = getY($(this));
+				$(this).html('<img src="images/' + type.toLowerCase() + 's/' + selected + '.png" class="gridObject"/>');
+				addGridObjectCode(x,y,selected,type);
+			});
+			$('#gridObjectClear').click(function(){
+				//clear code box
+				$('#gridObjectCode').html('');
+				//remove images from this stage only
+				$('td>img.gridObject').remove();
+			});
+			$('#gridObjectDone').click(function(){
+				if(!confirm('Are you sure you are done with grid objects?')) return;
+				//save grid object code box
+				finalGridObjectCode = $('#gridObjectCode').html();
+				startEnemyPlacement();		
+			});
+		}		
+		
+		/**
+			Adds the code for creating the given grid object to the code box.
+			@param x [int]
+			@param y [int]
+			@param selected [string] the name of the grid object
+			@param type [string] 'Obstacle' or 'Steppable'
+		*/
+		function addGridObjectCode(x,y,selected,type){
+			var codeBox = $('#gridObjectCode');
+			var add = 'new ' + type + '("' + selected + '",' + x + ',' + y + '),';
+			codeBox.html(codeBox.html() + add);		
+		}
+		
+		/**
+			Called when the user is ready to start placing enemies.
+		*/
+		function startEnemyPlacement(){
+			$('#gridObjects').addClass('hidden');
+			$('#enemies').removeClass('hidden');
+			$('td').click(function(){
+				var selected = $('#enemySelect').val();
+				if(selected == '---') return; //user selected divider
+				var x = getX($(this));
+				var y = getY($(this));
+				$(this).html('<img src="images/animals/' + selected.toLowerCase() + '.png" class="enemy"/>');
+				addEnemyCode(x,y,selected);
+			});
+			$('#enemyClear').click(function(){
+				//clear code box
+				$('#enemyCode').html('');
+				//remove images from this stage only
+				$('td>img.enemy').remove();
+			});
+			$('#enemyDone').click(function(){
+				if(!confirm('Are you sure you are done with enemies?')) return;
+				//save enemy code box
+				finalEnemyCode = $('#enemyCode').html();
+				showFinalCode();
+			});			
+		}
+		
+		/**
+			Adds the code for creating the given enemy to the code box.
+			@param x [int]
+			@param y [int]
+			@param selected [string] the name of the enemy
+		*/
+		function addEnemyCode(x,y,selected){
+			var enemyCode = $('#enemyCode');
+			var add = 'new Enemy("' + selected + '",' + x + ',' + y + ',' + 'L),'; //user must specify own level
+			enemyCode.html(enemyCode.html() + add);
+		}		
+		
+		/**
+			Shows the final code from the tiles, grid objects, and enemies.
+		*/
+		function showFinalCode(){
+			$('#enemies').addClass('hidden');
+			$('#final').removeClass('hidden');
+			
+			//create text to go in code box
+			var text = "";
+			text += "grid = '" + finalGridCode + "';\n";
+			text += "obstacles = [" + finalGridObjectCode + "];\n";
+			text += "enemies = [" + finalEnemyCode + "];";
+			
+			//put text in code box
+			$('#finalCode').html(text);
+		}
+		
+		/**
+			Changes the tile at the given coordinates.
+			@param x [int] the x coordinate
+			@param y [int] the y coordinate
+			@param selected [string] the abbreviation of what to set the tile to (p, g, d, etc.)
+		*/
+		function setTile(x,y,selected){
+			grid[y][x] = selected;
+			//change appearance of tile
+			getTile(x,y).css('backgroundImage','url(' + TILE_FOLDER + translateTileAbbreviation(selected) + '.png)');
+			//show new grid value
+			$('#gridCode').html(toString(grid));		
+		}
+		
+		function translateTileAbbreviation(abbreviation){
+			switch(abbreviation){
+				case GRASS: return 'grass';
+				case PATH: return 'path';
+				case ROAD: return 'road';
+				case DIRT: return 'dirt';
+				case CONCRETE: return 'concrete';
+				case TILE: return 'tile';
+				case WOOD: return 'wood';
+				case BRIDGE_NS: return 'bridge-ns';
+				case BRIDGE_EW: return 'bridge-ew';
+				case SNOW: return 'snow';
+				case SAVANNAH: return 'savannah';	
+				case WATER: return 'water';				
+			}
+		}			
+		
+		/**
+			Makes the given 2d array (grid) into a SS-compatible form.
+		*/
+		function toString(grid){
+			var str = "";
+			for(var i=0; i<15; i++){
+				for(var j=0; j<15;j++){
+					str += grid[i][j];
+				}
+				
+				str += " ";
+			}
+			
+			return str;
+		}		
+			
+		/**
+			Turns a into 10, b into 11, etc (hexadecimal code.)
+		*/
+		function convert(chr){
+			switch(chr){
+				case 'a':
+					return 10;
+				case 'b':
+					return 11;
+				case 'c':
+					return 12;
+				case 'd':
+					return 13;
+				case 'e':
+					return 14;
+				default:
+					return parseInt(chr); //it's 0-9
+			}
+		}
+		
+		/**
+			Turns 10 into a, 11 into b, etc (hexadecimal code.)
+		*/
+		function reverseConvert(num){
+			switch(num){
+			case 10:
+				return 'a';
+			case 11:
+				return 'b';
+			 case 12:
+				return 'c';
+			case 13:
+				return 'd';
+			case 14:
+				return 'e';
+			default:
+				return num + ''; //it's 0-9, but make it a string
+			}
+		}
+		
+		function getX(cell){
+			return convert(cell.attr('id').substr(1,1));
+		}
+		
+		function getY(cell){
+			return convert(cell.attr('id').substr(0,1));
+		}
+		
+		function getTile(x,y){
+			return $('#' + reverseConvert(y) + '' + reverseConvert(x));
+		}
+		
+		/**
+			Returns true if array contains element.
+		*/
+		function arrayContains(element,array){
+			for(var i=0; i<array.length; i++){
+				if(array[i] == element) return true;
+			}
+			return false;
+		}			
+	</script>
+	
+ </head>
+ <body>
+	<div id="all"> <!-- holds everything in the main body area -->
+		<div id="background_holder">
+			<!--<div id="board"></div>-->		
+			<table id="background">
+				<tr><td id='00'></td><td id='01'></td><td id='02'></td><td id='03'></td><td id='04'></td><td id='05'></td><td id='06'></td><td id='07'></td><td id='08'></td><td id='09'></td><td id='0a'></td><td id='0b'></td><td id='0c'></td><td id='0d'></td><td id='0e'></td></tr><tr><td id='10'></td><td id='11'></td><td id='12'></td><td id='13'></td><td id='14'></td><td id='15'></td><td id='16'></td><td id='17'></td><td id='18'></td><td id='19'></td><td id='1a'></td><td id='1b'></td><td id='1c'></td><td id='1d'></td><td id='1e'></td></tr><tr><td id='20'></td><td id='21'></td><td id='22'></td><td id='23'></td><td id='24'></td><td id='25'></td><td id='26'></td><td id='27'></td><td id='28'></td><td id='29'></td><td id='2a'></td><td id='2b'></td><td id='2c'></td><td id='2d'></td><td id='2e'></td></tr><tr><td id='30'></td><td id='31'></td><td id='32'></td><td id='33'></td><td id='34'></td><td id='35'></td><td id='36'></td><td id='37'></td><td id='38'></td><td id='39'></td><td id='3a'></td><td id='3b'></td><td id='3c'></td><td id='3d'></td><td id='3e'></td></tr><tr><td id='40'></td><td id='41'></td><td id='42'></td><td id='43'></td><td id='44'></td><td id='45'></td><td id='46'></td><td id='47'></td><td id='48'></td><td id='49'></td><td id='4a'></td><td id='4b'></td><td id='4c'></td><td id='4d'></td><td id='4e'></td></tr><tr><td id='50'></td><td id='51'></td><td id='52'></td><td id='53'></td><td id='54'></td><td id='55'></td><td id='56'></td><td id='57'></td><td id='58'></td><td id='59'></td><td id='5a'></td><td id='5b'></td><td id='5c'></td><td id='5d'></td><td id='5e'></td></tr><tr><td id='60'></td><td id='61'></td><td id='62'></td><td id='63'></td><td id='64'></td><td id='65'></td><td id='66'></td><td id='67'></td><td id='68'></td><td id='69'></td><td id='6a'></td><td id='6b'></td><td id='6c'></td><td id='6d'></td><td id='6e'></td></tr><tr><td id='70'></td><td id='71'></td><td id='72'></td><td id='73'></td><td id='74'></td><td id='75'></td><td id='76'></td><td id='77'></td><td id='78'></td><td id='79'></td><td id='7a'></td><td id='7b'></td><td id='7c'></td><td id='7d'></td><td id='7e'></td></tr><tr><td id='80'></td><td id='81'></td><td id='82'></td><td id='83'></td><td id='84'></td><td id='85'></td><td id='86'></td><td id='87'></td><td id='88'></td><td id='89'></td><td id='8a'></td><td id='8b'></td><td id='8c'></td><td id='8d'></td><td id='8e'></td></tr><tr><td id='90'></td><td id='91'></td><td id='92'></td><td id='93'></td><td id='94'></td><td id='95'></td><td id='96'></td><td id='97'></td><td id='98'></td><td id='99'></td><td id='9a'></td><td id='9b'></td><td id='9c'></td><td id='9d'></td><td id='9e'></td></tr><tr><td id='a0'></td><td id='a1'></td><td id='a2'></td><td id='a3'></td><td id='a4'></td><td id='a5'></td><td id='a6'></td><td id='a7'></td><td id='a8'></td><td id='a9'></td><td id='aa'></td><td id='ab'></td><td id='ac'></td><td id='ad'></td><td id='ae'></td></tr><tr><td id='b0'></td><td id='b1'></td><td id='b2'></td><td id='b3'></td><td id='b4'></td><td id='b5'></td><td id='b6'></td><td id='b7'></td><td id='b8'></td><td id='b9'></td><td id='ba'></td><td id='bb'></td><td id='bc'></td><td id='bd'></td><td id='be'></td></tr><tr><td id='c0'></td><td id='c1'></td><td id='c2'></td><td id='c3'></td><td id='c4'></td><td id='c5'></td><td id='c6'></td><td id='c7'></td><td id='c8'></td><td id='c9'></td><td id='ca'></td><td id='cb'></td><td id='cc'></td><td id='cd'></td><td id='ce'></td></tr><tr><td id='d0'></td><td id='d1'></td><td id='d2'></td><td id='d3'></td><td id='d4'></td><td id='d5'></td><td id='d6'></td><td id='d7'></td><td id='d8'></td><td id='d9'></td><td id='da'></td><td id='db'></td><td id='dc'></td><td id='dd'></td><td id='de'></td></tr><tr><td id='e0'></td><td id='e1'></td><td id='e2'></td><td id='e3'></td><td id='e4'></td><td id='e5'></td><td id='e6'></td><td id='e7'></td><td id='e8'></td><td id='e9'></td><td id='ea'></td><td id='eb'></td><td id='ec'></td><td id='ed'></td><td id='ee'></td></tr>				
+			</table>
+		</div>
+
+		
+		<div id="sidestuff">	
+			<div id="tiles">
+				<h3>Tiles</h3>
+				<select id="tileSelect">
+					<option title="grass">g</option>
+					<option title="path">p</option>
+					<option title="road">r</option>
+					<option title="dirt">d</option>
+					<option title="concrete">c</option>
+					<option title="tile">t</option>
+					<option title="wood">w</option>
+					<option title="bridge-ns">B</option>
+					<option title="bridge-ew">b</option>
+					<option title="snow">s</option>
+					<option title="savannah">v</option>
+					<option title="water">W</option>
+				</select>
+				<button id="applyToAll">Apply to all</button>
+				<br />
+				<textarea id="gridCode" readonly></textarea>
+				<br />
+				<button id="tilesDone">Done</button>
+			</div>
+			<div id="gridObjects" class="hidden">
+				<h3>GridObjects</h3>
+				<select id="gridObjectSelect"></select>
+				<br />
+				<textarea id="gridObjectCode" readonly></textarea>
+				<br />
+				<button id="gridObjectClear">Clear</button>
+				<button id="gridObjectDone">Done</button>
+			</div>
+			<div id="enemies" class="hidden">
+				<h3>Enemies</h3>
+				<p>Remember to set the enemies' levels! (Put the level where "L" is.)</p>
+				<select id="enemySelect"></select>
+				<br />
+				<textarea id="enemyCode" readonly></textarea>
+				<br />
+				<button id="enemyClear">Clear</button>
+				<button id="enemyDone">Done</button>
+			</div>
+			<div id="final" class="hidden">
+				<h3>Final code</h3>
+				<textarea id="finalCode"></textarea>
+			</div>
+		</div>
+	</div>
+ </body>
+ </html>

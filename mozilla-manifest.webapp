@@ -1,0 +1,19 @@
+    {  
+      "version": "1.0",  
+      "name": "Sprinkle Safari",  
+      "description": "Save the worlds donuts in this fun adventure game!", 
+      "launch_path": "/games/sprinkle_safari", 
+      "icons": {  
+        "16": "/games/sprinkle_safari/images/icons/icon16.png",  
+        "48": "/games/sprinkle_safari/images/icons/icon48.png",  
+        "128": "/games/sprinkle_safari/images/icons/icon128.png"  
+      },  
+      "developer": {  
+        "name": "Neel Mehta",  
+        "url": "http://www.hathix.com"  
+      },  
+      "installs_allowed_from": [  
+        "https://marketplace.firefox.com"  
+      ],  
+      "default_locale": "en"
+    }  

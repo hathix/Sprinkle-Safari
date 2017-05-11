@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Sprinkle Safari - a fun web game by hathix.com</title>
+		<meta name="description" content="Team up with dozens of cute and spunky animals as you travel through over 40 levels in a quest to save the world’s donuts!" />
+		<meta name="keywords" content="sprinkle, safari, hathix, web game, web app, chrome" />
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="icon" type="image/png" href="images/icons/icon16.png" />
+		<link type="text/css" href="libraries/jquery-ui/css/ui-lightness/jquery-ui.css" rel="stylesheet" />
+		<link type="text/css" rel="stylesheet" href="libraries/qtip/jquery.qtip.min.css" />
+		<script type="text/javascript" src="libraries/jquery.js"></script>
+		<script type="text/javascript" src="libraries/jquery-ui/js/jquery-ui.js"></script>
+		<script type="text/javascript" src="libraries/qtip/jquery.qtip.min.js"></script>
+		<script type="text/javascript" src="libraries/jquery.store.js"></script>
+		<!-- import here -->
+		<script src="assorted_objects.js"></script>
+		<script src="constants.js"></script>
+		<script src="utils.js"></script>
+		<script src="global_vars.js"></script>
+		<script src="abilities.js"></script>
+		<script src="stat_db.js"></script>
+		<script src="gridobject.js"></script>
+		<script src="obstacle.js"></script>
+		<script src="animal.js"></script>
+		<script src="enemy.js"></script>
+		<script src="ally.js"></script>
+		<script src="getobject.js"></script>
+		<script src="level.js"></script>
+		<script src="save_load.js"></script>
+		<script src="minigame.js"></script>
+		<script src="main.js"></script>
+		<script src="start.js"></script>
+		<script src="act1.js"></script>
+		<script src="act2.js"></script>
+		<script src="act3.js"></script>
+		<script src="act4.js"></script>
+	</head>
+	<body>
+		<div id="startscreen">
+			<!-- covers everything at start -->
+			<div id="main-menu">
+				<!-- main menu, etc -->
+				<div id="splash"></div>
+				<table id="main-menu-buttons">
+					<tr>
+						<td>
+						<button id="main-continue">
+							Continue game
+						</button></td>
+						<td>
+						<button id="main-new">
+							New game
+						</button></td>
+					</tr>
+					<tr>
+						<td>
+						<button id="main-mini">
+							Minigame
+						</button></td>
+						<td>
+						<button id="main-help">
+							Help
+						</button></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button id="main-chrome">
+								<a href="http://is.gd/getsprinkled">Download on Chrome App Store</a>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div id="header-background">
+			<!--class="ui-widget-header"-->
+			<div id="header-content">
+				<span id="header-help">Help</span>
+			</div>
+		</div>
+		<div id="all">
+			<!-- holds everything in the main body area -->
+			<div id="background_holder">
+				<div id="board"></div><!-- grid objects go here -->
+				<table id="background">
+					<tr>
+						<td id='00'></td><td id='01'></td><td id='02'></td><td id='03'></td><td id='04'></td><td id='05'></td><td id='06'></td><td id='07'></td><td id='08'></td><td id='09'></td><td id='0a'></td><td id='0b'></td><td id='0c'></td><td id='0d'></td><td id='0e'></td>
+					</tr>
+					<tr>
+						<td id='10'></td><td id='11'></td><td id='12'></td><td id='13'></td><td id='14'></td><td id='15'></td><td id='16'></td><td id='17'></td><td id='18'></td><td id='19'></td><td id='1a'></td><td id='1b'></td><td id='1c'></td><td id='1d'></td><td id='1e'></td>
+					</tr>
+					<tr>
+						<td id='20'></td><td id='21'></td><td id='22'></td><td id='23'></td><td id='24'></td><td id='25'></td><td id='26'></td><td id='27'></td><td id='28'></td><td id='29'></td><td id='2a'></td><td id='2b'></td><td id='2c'></td><td id='2d'></td><td id='2e'></td>
+					</tr>
+					<tr>
+						<td id='30'></td><td id='31'></td><td id='32'></td><td id='33'></td><td id='34'></td><td id='35'></td><td id='36'></td><td id='37'></td><td id='38'></td><td id='39'></td><td id='3a'></td><td id='3b'></td><td id='3c'></td><td id='3d'></td><td id='3e'></td>
+					</tr>
+					<tr>
+						<td id='40'></td><td id='41'></td><td id='42'></td><td id='43'></td><td id='44'></td><td id='45'></td><td id='46'></td><td id='47'></td><td id='48'></td><td id='49'></td><td id='4a'></td><td id='4b'></td><td id='4c'></td><td id='4d'></td><td id='4e'></td>
+					</tr>
+					<tr>
+						<td id='50'></td><td id='51'></td><td id='52'></td><td id='53'></td><td id='54'></td><td id='55'></td><td id='56'></td><td id='57'></td><td id='58'></td><td id='59'></td><td id='5a'></td><td id='5b'></td><td id='5c'></td><td id='5d'></td><td id='5e'></td>
+					</tr>
+					<tr>
+						<td id='60'></td><td id='61'></td><td id='62'></td><td id='63'></td><td id='64'></td><td id='65'></td><td id='66'></td><td id='67'></td><td id='68'></td><td id='69'></td><td id='6a'></td><td id='6b'></td><td id='6c'></td><td id='6d'></td><td id='6e'></td>
+					</tr>
+					<tr>
+						<td id='70'></td><td id='71'></td><td id='72'></td><td id='73'></td><td id='74'></td><td id='75'></td><td id='76'></td><td id='77'></td><td id='78'></td><td id='79'></td><td id='7a'></td><td id='7b'></td><td id='7c'></td><td id='7d'></td><td id='7e'></td>
+					</tr>
+					<tr>
+						<td id='80'></td><td id='81'></td><td id='82'></td><td id='83'></td><td id='84'></td><td id='85'></td><td id='86'></td><td id='87'></td><td id='88'></td><td id='89'></td><td id='8a'></td><td id='8b'></td><td id='8c'></td><td id='8d'></td><td id='8e'></td>
+					</tr>
+					<tr>
+						<td id='90'></td><td id='91'></td><td id='92'></td><td id='93'></td><td id='94'></td><td id='95'></td><td id='96'></td><td id='97'></td><td id='98'></td><td id='99'></td><td id='9a'></td><td id='9b'></td><td id='9c'></td><td id='9d'></td><td id='9e'></td>
+					</tr>
+					<tr>
+						<td id='a0'></td><td id='a1'></td><td id='a2'></td><td id='a3'></td><td id='a4'></td><td id='a5'></td><td id='a6'></td><td id='a7'></td><td id='a8'></td><td id='a9'></td><td id='aa'></td><td id='ab'></td><td id='ac'></td><td id='ad'></td><td id='ae'></td>
+					</tr>
+					<tr>
+						<td id='b0'></td><td id='b1'></td><td id='b2'></td><td id='b3'></td><td id='b4'></td><td id='b5'></td><td id='b6'></td><td id='b7'></td><td id='b8'></td><td id='b9'></td><td id='ba'></td><td id='bb'></td><td id='bc'></td><td id='bd'></td><td id='be'></td>
+					</tr>
+					<tr>
+						<td id='c0'></td><td id='c1'></td><td id='c2'></td><td id='c3'></td><td id='c4'></td><td id='c5'></td><td id='c6'></td><td id='c7'></td><td id='c8'></td><td id='c9'></td><td id='ca'></td><td id='cb'></td><td id='cc'></td><td id='cd'></td><td id='ce'></td>
+					</tr>
+					<tr>
+						<td id='d0'></td><td id='d1'></td><td id='d2'></td><td id='d3'></td><td id='d4'></td><td id='d5'></td><td id='d6'></td><td id='d7'></td><td id='d8'></td><td id='d9'></td><td id='da'></td><td id='db'></td><td id='dc'></td><td id='dd'></td><td id='de'></td>
+					</tr>
+					<tr>
+						<td id='e0'></td><td id='e1'></td><td id='e2'></td><td id='e3'></td><td id='e4'></td><td id='e5'></td><td id='e6'></td><td id='e7'></td><td id='e8'></td><td id='e9'></td><td id='ea'></td><td id='eb'></td><td id='ec'></td><td id='ed'></td><td id='ee'></td>
+					</tr>
+				</table>
+				<div id="dialogue">
+					<div>
+						<img id="dialogue_image" />
+						<span id="dialogue_name"></span>
+					</div>
+					<div id="dialogue_text"></div>
+					<span id="dialogue_buttons">
+						<button id="dialogue_next_button">
+							Next
+						</button>
+						<button id="dialogue_close_button">
+							Close
+						</button> </span>
+				</div>
+			</div>
+			<div id="enemy-name-dialog" title="New recruit!">
+				<p id="enemy-name-text"></p>
+				<input type="text" name="enemy-name" id="enemy-name" class="text ui-widget-content ui-corner-all" />
+			</div>
+			<div id="difficulty-level-dialog" class="hidden" title="Choose a difficulty level">
+				<p>
+					Sprinkle Safari is the tale of a young elephant named hathix and his quest to... well, you'll see. You play hathix and his friends in this game of action, adventure, and romance (just kidding about that last one.)
+				</p>
+				<p>
+					But first, choose a difficulty level.
+				</p>
+				<div id="difficulty-level-buttonset"></div>
+			</div>
+			<div id="minigame-dialog" class="hidden" title="Starting a minigame">
+				<p>
+					A minigame is a quick 5-on-5 death match against a computer with random animals. The more minigames you win, the more stages you unlock to battle on! You have currently won <span id="minigames-num-won">0</span> minigames.
+				</p>
+				<p>
+					Click on a stage you want to battle on:
+				</p>
+				<div id="minigame-stages"></div>
+			</div>
+			<div id="game-over-dialog" class="hidden" title="Game Over!">
+				<h1>GAME OVER :(</h1>
+				<p id="game-over-who-died">
+					Your main character died, which means game over.
+				</p>
+			</div>
+			<div id="minigame-win-dialog" class="hidden" title="You win!">
+				<h1>YOU WIN :)</h1>
+				<p id="you-win-why">
+					You finished the game! Nice!
+				</p>
+			</div>
+			<div id="sidestuff">
+				<button id="clear-log">
+					Clear log
+				</button>
+				<div id="log"></div>
+				<div id="arrows">
+					<table>
+						<tr>
+							<td></td>
+							<td>
+							<input type="image" class="Up" data-type="attack" />
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+							<input type="image" class="Left" data-type="attack" />
+							</td>
+							<td>
+							<input type="image" class="Down" data-type="attack" />
+							</td>
+							<td>
+							<input type="image" class="Right" data-type="attack" />
+							</td>
+						</tr>
+					</table>
+				</div>
+				<button id="skip-turn">
+					Skip turn
+				</button>
+				<!--<div class="arrows" id="move_arrows">
+				<table>
+				<tr>
+				<td></td>
+				<td><input type="image" class="Up" data-type="move" /></td>
+				<td></td>
+				</tr>
+				<tr>
+				<td><input type="image" class="Left" data-type="move" /></td>
+				<td><input type="image" class="Down" data-type="move" /></td>
+				<td><input type="image" class="Right" data-type="move" /></td>
+				</tr>
+				</table>
+				</div>-->
+			</div>
+		</div>
+		<div id="help-dialog" class="hidden" title="Help">
+			<div id="help-tabs">
+				<ul>
+					<li>
+						<a href="#tabs-intro">Intro</a>
+					</li>
+					<li>
+						<a href="#tabs-shortcuts">Keyboard Shortcuts</a>
+					</li>
+					<li>
+						<a href="#tabs-contact">Contact</a>
+					</li>
+				</ul>
+				<div id="tabs-intro">
+					<p>
+						Sprinkle Safari is an adventure/role-playing game. You control a young elephant on a quest to defeat the evil Dr. Llama and reclaim the world's donuts.
+					</p>
+					<p>
+						Meet Dr. Llama in his lair by adventuring through 40+ levels in 5 different worlds and battling the cute and wacky cast of 30+ animals, from dogs to bears to dinosaurs. Collect the most powerful animals to defeat the evil minions of Dr. Llama!
+					</p>
+					<p>
+						Not only can you journey through the wide world in adventure mode - you can test your battle skills and get to meet new animals with Minigames, which are quick 5-on-5 death matches.
+					</p>
+				</div>
+				<div id="tabs-shortcuts">
+					<table id="help-keyboard-shortcuts">
+						<tr>
+							<td>Up</td>
+							<td>Move/attack up</td>
+						</tr>
+						<tr>
+							<td>Down</td>
+							<td>Move/attack down</td>
+						</tr>
+						<tr>
+							<td>Left</td>
+							<td>Move/attack left</td>
+						</tr>
+						<tr>
+							<td>Right</td>
+							<td>Move/attack right</td>
+						</tr>
+						<tr>
+							<td>End</td>
+							<td>Skip turn</td>
+						</tr>
+						<tr>
+							<td>Alt</td>
+							<td>Displays the number of each team member.</td>
+						</tr>
+						<tr>
+							<td>Alt-[#]</td>
+							<td>Selects the team member with the given number (1-5).</td>
+						</tr>
+						<tr>
+							<td>Ctrl</td>
+							<td>Causes the selected team member to use its ability.</td>
+						</tr>
+					</table>
+				</div>
+				<div id="tabs-contact">
+					Questions? Comments? Email Neel at <a href="mailto:neel@hathix.com">neel@hathix.com</a>.
+				</div>
+			</div>
+		</div>
+		<!-- Start Piwik Tracking Tag -->
+		<script type="text/javascript">
+			var pkBaseURL = (("https:" == document.location.protocol) ? "https://hathix.com/piwik/" : "http://hathix.com/piwik/");
+			document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+
+		</script>
+		<script type="text/javascript">
+			try {
+				var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+				piwikTracker.trackPageView();
+				piwikTracker.enableLinkTracking();
+			} catch( err ) {
+			}
+		</script>
+		<noscript>
+			<p><img src="http://hathix.com/piwik/piwik.php?idsite=1" style="border:0" alt="" />
+			</p>
+		</noscript>
+		<!-- End Piwik Tracking Tag -->
+	</body>
+</html>

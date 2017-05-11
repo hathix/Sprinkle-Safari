@@ -1,0 +1,628 @@
+/* IE */
+
+.oldie .container{
+	/* don't show the normal body */
+	display: none;
+}
+
+.oldie .old-container{
+	display: block !important;
+}
+
+.old-container{
+	display: none; /* for the rest of us */
+}
+
+/* END IE */
+
+body{
+	padding: 0;
+	margin: 0;
+	font-size: 15px;
+	color: #222;
+}
+
+body, .ui-widget, .ui-widget input{
+    font-family: 'OpenSansRegular', Ubuntu, 'Lao UI', 'Segoe UI', Calibri, 'Trebuchet MS', Georgia, sans-serif !important;
+}
+
+div#all{
+	margin: auto;
+	padding: 0;
+	position: relative;
+	top: 5px;
+	height: 600px;
+}
+
+#loadingscreen{
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 5000;
+	background-color: #EEE;
+	/*background-image: url(images/loading-bg.png);*/ /* for some reason this won't work here */
+	background-position: center;
+	background-repeat: no-repeat;
+	display: table-cell;
+}
+
+#startscreen{
+	/*display: none !important;*/
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	background-color: #FFF; /* block out stuff behind (the map) */
+	background-image: url(../images/tiles/translucent/grass.png);
+}
+
+#splash{
+	position: relative;
+	width: 500px;
+	height: 260px;
+	background-image: url(../images/non-game/splash.png);
+}
+
+#hidden-elephant{
+	/* secret - click on the elephant in splash */
+	position: absolute;
+	top: 122px;
+	left: 32px;
+	width: 68px;
+	height: 64px;
+}
+
+#hidden-llama-eye{
+	/* the llama's left eye */
+	position: absolute;
+	top: 166px;
+	left: 131px;
+	width: 10px;
+	height: 10px;
+	border-radius: 3px; /* it's (almost) a circle */
+}
+
+#main-menu{
+	/* splash screen, intro screen */
+	position: relative;
+	width: 500px;
+	height: 500px;
+	background-image: url(../images/tiles/grass.png);
+	margin: auto;
+	border-radius: 3px;
+}
+
+#main-menu-buttons{
+	position: relative;
+	text-align: center;
+	margin: auto;
+}
+
+#main-menu-buttons td{
+	width: 180px;
+	padding: 5px;
+}
+
+#main-menu-buttons button{
+	width: 100%;
+}
+
+#win-dialog, #game-over-dialog{
+	text-align: center;
+}
+
+/*#header-background{
+	position: absolute;
+	width: 100%;
+	height: 30px;
+	background: rgb(125,126,125);
+	background: -moz-linear-gradient(top, rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1)));
+	background: -webkit-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: -o-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: -ms-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+	background: linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+}
+
+#header-content{
+	color: #EFEFEF;
+	height: 30px;
+	width: 950px;
+	margin: auto;
+	line-height: 30px;
+}*/
+
+#help-dialog{
+	padding: 10px;
+}
+
+#help-tabs>div{
+	height: 380px;
+	overflow: scroll;
+}
+
+
+/* MINIGAME */
+#minigame-stages{
+	width: 450px;	
+}
+
+.minigame-thumbnail{
+	width: 100px;
+	height: 100px;
+	margin: 5px;
+	cursor: pointer;
+}
+
+#minigames-num-won{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+/* background table goes here, as does the stuff on grid holder */
+#background_holder{
+	width: 600px;
+	height: 600px;
+	position: relative;
+	float: left;
+}
+
+/* any enemies, coins, friends on grid stay here 
+   basically just an overlay of background_holder and background */
+#board{
+	width: 600px;
+	height: 600px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}
+
+/* any gridobject or you uses an image like this */
+#board div{
+	position: absolute; /* allows for it to overlay background_holder */
+	width: 40px; /* scale it down if necessary, although scaling the image itself is better */
+	height: 40px;
+	/* for smooth movements */
+	/*transition: top 0.3s, left 0.3s;
+	-webkit-transition: top 0.3s, left 0.3s;
+	-moz-transition: top 0.3s, left 0.3s;
+	-o-transition: top 0.3s, left 0.3s;
+	transition-timing-function: linear;
+	-webkit-transition-timing-function: linear;
+	-moz-transition-timing-function: linear;
+	-o-transition-timing-function: linear;*/
+	/* top and left are set by the javascript */
+}
+
+#board img{
+	width: 40px;
+	height: 40px;
+}
+
+/* the background (tiles) goes in this table */
+#background{
+	width: 600px; /* 15 * 40, for 15 tiles of 30px each */
+	height: 600px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+#background td{
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+.highlight-layer{
+    position: absolute;
+    z-index: 9;
+    cursor: pointer;
+    opacity: 0.8;
+    width: 40px;
+    height: 40px;
+}
+
+/* highlight classes */
+.move-highlight{
+    background-image: url(../images/backgrounds/move-highlight.png);
+}
+
+.attack-highlight{
+    background-image: url(../images/backgrounds/attack-highlight.png);
+}
+
+/* other view stuff */
+#all{
+	/* everything in this part of the page */
+	width: 950px;
+}
+
+#sidestuff{
+	float: right;
+	width: 330px;
+	margin-left: 20px;
+	position: relative;
+}
+
+/* arrows */
+#arrows{
+	position: absolute;
+	top: 430px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+#arrows button{
+	min-width: 48px;
+	height: 48px;
+	border-radius: 5px;
+	margin: 0;
+}
+
+#arrows .ui-button-text{
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#skip-turn{
+	width: 100%;
+}
+
+/* info tabs - log, team info*/
+#info-tabs{
+	height: 400px;
+	width: 250px;
+	margin-top: 5px;
+	border: 1px solid black;
+	border-radius: 3px;
+	overflow: auto;
+	position: relative;
+	background: rgba(255, 255, 255, 0.1) !important;
+}
+
+#info-tabs > div{
+	padding: 2px;
+}
+
+#log-content{
+	padding: 0px !important;
+	padding-top: 3px !important;
+}
+
+.log_entry{
+	padding: 4px;
+	margin: 3px 3px;
+	border: 1px solid black;	
+	border-radius: 2px;
+	opacity: 0.8;
+}
+
+/* special log entry classes */
+.info{
+	background-color: #B5B5FF;
+	font-weight: bold;
+}
+
+.urgent{
+	background-color: #FFCC00;
+	font-weight: bold;
+}
+
+.heal{
+	background-color: #A5FF7F;
+}
+
+.attack-ally{
+	background-color: #FF7777;
+}
+
+.attack-enemy{
+	background-color: #FFBABA;
+}
+
+.die{
+	background-color: #000000;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.defeat{
+	background-color: #CE1313;
+	color: #FFFFFF;
+}
+
+.recruit{
+	background-color: #FFEE9B;
+	font-weight: bold;
+}
+
+.levelup{
+	background-color: #009110;
+	color: #FFFFFF;
+}
+
+.ability{
+	background-color: #FF7F30;
+}
+
+.ability-error{
+	background-color: #FF9B56;
+}
+
+/* general */
+.hidden{
+	display: none;
+}
+
+.invisible{
+	opacity: 0;
+}
+
+
+button{
+	font-size: 16px !important;
+}
+
+/* tutorial */
+#tutorial-overlay{
+	position: absolute; /* relative to all */
+	top: 0;
+	left: 0;
+	width: 878px;
+	height: 600px;
+	border-radius: 5px;
+	z-index: 10000;
+	display: none;
+}
+
+#tutorial-ok{
+	position: absolute;
+	top: 170px;
+	left: 630px;
+	width: 235px;
+}
+
+#tutorial-ok .ui-button-text{
+	font-variant: small-caps;
+	font-size: 30px;
+}
+
+/* dialogue */
+#dialogue{
+	visibility: hidden;
+	position: absolute;
+	bottom: 50px;
+	left: 90px;
+	width: 400px;
+	padding: 0 5px;
+	z-index: 10;
+	border-radius: 3px;
+	
+background: -moz-linear-gradient(top,  rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.4) 75%, rgba(255,255,255,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.2)), color-stop(75%,rgba(255,255,255,0.4)), color-stop(100%,rgba(255,255,255,1)));
+background: -webkit-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 75%,rgba(255,255,255,1) 100%);
+background: -o-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 75%,rgba(255,255,255,1) 100%);
+background: -ms-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 75%,rgba(255,255,255,1) 100%);
+background: linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.4) 75%,rgba(255,255,255,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33ffffff', endColorstr='#ffffff',GradientType=0 );
+
+}
+
+#dialogue-image{
+	display: block;
+	margin: 5px;
+	float: left;
+}
+
+#ui-tooltip-dialogue{
+	box-shadow: 0 0 4px 4px #EEE;
+}
+
+#ui-tooltip-dialogue-content{
+	padding: 5px;
+	font-size: 16px;
+	line-height: 1.25em;
+} 
+
+#ui-tooltip-dialogue-title{
+	font-size: 15px;
+}
+
+#dialogue_next_button, #dialogue_close_button{
+	margin: 10px;
+}
+
+#dialogue_next_button{
+
+}
+
+#dialogue_close_button{
+
+}
+
+/*.dialogue-ally{
+	background: rgba(200,255,200,0.7) !important;
+	box-shadow: 0 0 5px 2px rgb(200,255,200) !important;
+}
+
+.dialogue-enemy{
+	background: rgba(255,200,200,0.7) !important;
+	box-shadow: 0 0 5px 2px rgb(255,200,200) !important;
+}
+
+.dialogue-neutral{
+	background: rgba(200,200,255,0.7) !important;
+	box-shadow: 0 0 5px 2px rgb(200,200,255) !important;
+}
+
+.dialogue-sign{
+	background: rgba(255,255,200,0.7) !important;
+	box-shadow: 0 0 5px 2px rgb(255,255,200) !important;
+}*/
+
+/* dialogs */
+#remove-ally-table td{
+	width: 120px;
+	padding: 10px;
+	text-align: center;
+}
+#remove-ally-table h3{
+	text-align: center;
+	font-weight: bold;
+	font-size: 120%;
+}
+#remove-ally-table img{
+	margin: auto;
+	vertical-align: middle;
+}
+#remove-ally-table .ui-progressbar span{
+	width: 122px;
+}
+
+/* for the div's of gridobjects */
+
+.selected{
+	background-image: url(../images/backgrounds/selected-bg.png) !important;
+}
+
+.ally{
+	/* normal ally */
+	background-image: url(../images/backgrounds/ally-background.png);
+	cursor: pointer;
+	z-index: 7 !important;
+}
+
+.enemy{
+	/* any enemy */
+	background-image: url(../images/backgrounds/enemy-bg.png);
+	z-index: 6 !important;
+}
+
+.obstacle, .steppable{
+	z-index: 5;
+}
+
+.stunned>img{
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 10px;
+}
+
+.lockdown>img{
+background: -moz-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.35) 75%, rgba(255,255,255,0) 100%);
+background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.75)), color-stop(75%,rgba(0,0,0,0.35)), color-stop(100%,rgba(255,255,255,0)));
+background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.35) 75%,rgba(255,255,255,0) 100%);
+background: -o-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.35) 75%,rgba(255,255,255,0) 100%);
+background: -ms-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.35) 75%,rgba(255,255,255,0) 100%);
+background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.35) 75%,rgba(255,255,255,0) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', endColorstr='#00ffffff',GradientType=1 );
+
+}
+
+.breaker{
+	clear: both;
+}
+
+.ui-progressbar span{
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	margin: auto;
+	line-height: 15px;
+	font-size: 13px;
+}
+
+
+/* tooltip */
+
+.ui-tooltip-hoverstats{
+	/* hovering stats */
+	font-size: 16px !important;
+	line-height: 18px !important;
+	width: 230px;
+	opacity: 0.8;
+}
+
+.stats-table{
+	margin: auto;
+}
+
+.stats-table td{
+	padding: 0 10px;
+}
+
+.stats-table td:first-of-type{
+	padding-left: 0;
+}
+
+.stats-table td:last-of-type{
+	padding-right: 0;
+}
+
+.ui-tooltip-hoverstats button{
+	font-size: 14px !important;
+	margin: 5px;
+}
+
+.ui-tooltip-badge{
+	opacity: 0.8 !important;
+	text-align: center !important;
+	border-radius: 3px;
+}
+
+.hp-healthy{
+	/* for hp bar when you're healthy */
+background: rgb(129,255,71);
+background: -moz-linear-gradient(top,  rgba(129,255,71,1) 0%, rgba(99,255,28,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(129,255,71,1)), color-stop(100%,rgba(99,255,28,1)));
+background: -webkit-linear-gradient(top,  rgba(129,255,71,1) 0%,rgba(99,255,28,1) 100%);
+background: -o-linear-gradient(top,  rgba(129,255,71,1) 0%,rgba(99,255,28,1) 100%);
+background: -ms-linear-gradient(top,  rgba(129,255,71,1) 0%,rgba(99,255,28,1) 100%);
+background: linear-gradient(top,  rgba(129,255,71,1) 0%,rgba(99,255,28,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#81ff47', endColorstr='#63ff1c',GradientType=0 );
+border: 1px solid #3CBF00;
+	
+}
+
+/* ally info tab */
+.ally-info-block{
+	background: rgba(255,255,255, 0.3);
+	padding: 4px;
+	margin: 4px 0;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+.ally-info-image{
+	float: left;
+	display: block;
+	width: 25px;
+	height: 25px;
+	margin-right: 5px;
+}
+
+.ally-info-name{
+	float: left;
+}
+
+.ally-info-hp-bar{
+	margin-left: 110px;
+	width: 125px !important;
+	height: 15px !important;
+}
+
+.ally-info-hp-label{
+	width: 125px !important;
+}
+
+.ally-info-stats{
+	clear: both;
+	margin: auto;
+}

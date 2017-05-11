@@ -1,0 +1,394 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if IE 9]>	  <html class="no-js ie9 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 9]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Sprinkle Safari - a web adventure game by hathix.com</title>
+  <meta name="description" content="Save the world (or at least its donuts)! Battle and team up with dozens of animals as you journey through 5 challenging worlds!">
+  <meta name="author" content="Neel Mehta, hathix.com">
+
+  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+  <!-- CSS: implied media=all -->
+  <!-- CSS concatenated and minified via ant build script-->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ss.css">
+    <link rel="stylesheet" href="css/open-sans/stylesheet.css">
+    <link rel="stylesheet" href="libraries/jquery-ui/css/ui-lightness/jquery-ui.css">
+	<link rel="stylesheet" href="css/jquery.qtip.min.css">
+
+  <!-- end CSS-->
+
+
+  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+	<link rel="shortcut icon" type="image/ico" href="favicon.ico">
+	<!-- iOS will scan root directory, so no link needed; but Android needs it -->
+	<link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
+
+	<link rel="canonical" href="http://www.hathix.com/games/sprinkle_safari">
+
+	<!-- IE9 pinning -->
+	<meta name="application-name" content="Sprinkle Safari">
+	<meta name="msapplication-tooltip" content="A fun web-based adventure game">
+	<meta name="msapplication-starturl" content="http://www.hathix.com/games/sprinkle_safari">
+	<meta name="msapplication-window" content="width=1000;height=660">
+	<meta name="msapplication-navbutton-color" content="#EC77A4">
+
+  <!-- All JavaScript at the bottom, except for Modernizr / Respond.
+       Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
+       For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+</head>
+
+<body>
+	<div class="old-container">
+		<!-- to show to IE -->
+		Your browser is not supported.
+	</div>
+
+
+	<div id="container">
+		<div id="loadingscreen" style="background-image: url(images/loading-bg.png);">
+			<!-- truly covers everything till main menu loaded -->
+		</div>
+
+		<div id="startscreen">
+			<!-- covers everything at start -->
+			<div id="main-menu">
+				<!-- main menu, etc -->
+				<div id="splash">
+					<div id="hidden-elephant"></div>
+					<div id="hidden-llama-eye"></div>
+				</div>
+				<table id="main-menu-buttons">
+					<tr>
+						<td>
+						<button id="main-continue">
+							Continue game
+						</button></td>
+						<td>
+						<button id="main-new">
+							New game
+						</button></td>
+					</tr>
+					<tr>
+						<td>
+						<button id="main-mini">
+							Minigame
+						</button></td>
+						<td>
+						<button id="main-help">
+							Help
+						</button></td>
+					</tr>
+					<tr>
+					    <td colspan="2">
+					    <button id="main-sync">
+					        Sync my data
+					    </button>
+					    </td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button id="main-fullscreen">
+								View in full screen
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button id="main-chrome">
+								<a href="https://chrome.google.com/webstore/detail/fbhkggghbnhomlfdjfonmbodefnffbfg" target="_blank"><!-- or http://is.gd/getsprinkled -->Download on Chrome App Store</a>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div id="all">
+			<!-- holds everything in the main body area -->
+			<div id="background_holder">
+				<div id="board"></div><!-- grid objects go here -->
+				<table id="background">
+				    <!-- tiles go here -->
+				</table>
+
+				<div id="dialogue">
+					<img id="dialogue-image" />
+					<div id="dialogue-text"></div>
+					<span id="dialogue-buttons">
+						<button id="dialogue_next_button">
+							Next
+						</button>
+						<button id="dialogue_close_button">
+							Close
+						</button>
+					</span>
+				</div>
+
+			</div>
+
+			<div id="tutorial-overlay">
+				<button id="tutorial-ok" class="ui-state-hover">Got it, let's play!</button>
+			</div>
+
+			<div id="enemy-name-dialog" title="New recruit!">
+				<p id="enemy-name-text"></p>
+				<input type="text" name="enemy-name" id="enemy-name" class="text ui-widget-content ui-corner-all" />
+			</div>
+			<div id="difficulty-level-dialog" class="hidden" title="Choose a difficulty level">
+				<p>
+					Sprinkle Safari is the tale of a young elephant named hathix and his quest to... well, you'll see. You play hathix and his friends in this game of action, adventure, and romance (just kidding about that last one.)
+				</p>
+				<p>
+					But first, choose a difficulty level.
+				</p>
+				<div id="difficulty-level-buttonset"></div>
+			</div>
+			<div id="remove-ally-dialog" class="hidden" title="Too many teammates!">
+				<p id="remove-ally-text"></p>
+				<table id="remove-ally-table">
+					<tr>
+						<td id="ally0"></td>
+						<td id="ally1"></td>
+						<td id="ally2"></td>
+						<td id="ally3"></td>
+						<td id="ally4"></td>
+						<td id="ally5"></td>
+					</tr>
+				</table>
+			</div>
+			<div id="minigame-dialog" class="hidden" title="Starting a minigame">
+				<p>
+					A minigame is a quick 5-on-5 death match against a computer with random animals. The more minigames you win, the more stages you unlock to battle on! You have currently won <span id="minigames-num-won">0</span> minigames.
+				</p>
+				<p>
+					Click on a stage you want to battle on:
+				</p>
+				<div id="minigame-stages"></div>
+			</div>
+			<div id="game-over-dialog" class="hidden" title="Game Over!">
+				<h1>GAME OVER :(</h1>
+				<p id="game-over-who-died">
+					Your main character died! Why don't you start this level over?
+				</p>
+			</div>
+			<div id="win-dialog" class="hidden" title="You win!">
+				<h1>YOU WIN :)</h1>
+				<p id="you-win-why">
+					You finished the game! Nice!
+				</p>
+			</div>
+			<div id="sidestuff">
+
+				<div id="info-tabs">
+					<ul>
+						<li>
+							<a href="#log-content">Log</a>
+						</li>
+						<li>
+							<a href="#team-info">Team Info</a>
+						</li>
+					</ul>
+
+					<div id="log-content"></div>
+					<div id="team-info"></div>
+				</div>
+
+				<div id="arrows">
+					<table>
+						<tr>
+							<td></td>
+							<td>
+								<button class="Up"><img src="images/arrows/arrow-up.png" alt="Up" /></button>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>
+							<button class="Left"><img src="images/arrows/arrow-left.png" alt="Left" /></button>
+							</td>
+							<td>
+							<button class="Down"><img src="images/arrows/arrow-down.png" alt="Down" /></button>
+							</td>
+							<td>
+							<button class="Right"><img src="images/arrows/arrow-right.png" alt=""Up"Right" /></button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<button id="skip-turn">
+									Skip turn
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!--<div class="arrows" id="move_arrows">
+				<table>
+				<tr>
+				<td></td>
+				<td><input type="image" class="Up" data-type="move" /></td>
+				<td></td>
+				</tr>
+				<tr>
+				<td><input type="image" class="Left" data-type="move" /></td>
+				<td><input type="image" class="Down" data-type="move" /></td>
+				<td><input type="image" class="Right" data-type="move" /></td>
+				</tr>
+				</table>
+				</div>-->
+			</div>
+		</div>
+		<div id="help-dialog" class="hidden" title="Help">
+			<div id="help-tabs">
+				<ul>
+					<li>
+						<a href="#tabs-intro">Intro</a>
+					</li>
+					<li>
+						<a href="#tabs-shortcuts">Keyboard Shortcuts</a>
+					</li>
+					<li>
+						<a href="#tabs-contact">Contact</a>
+					</li>
+				</ul>
+				<div id="tabs-intro">
+					<p>
+						Sprinkle Safari is an adventure/role-playing game. You control a young elephant on a quest to defeat the evil Dr. Llama and reclaim the world's donuts.
+					</p>
+					<p>
+						Meet Dr. Llama in his lair by adventuring through 50 levels in 5 different worlds and battling the cute and wacky cast of 40 animals, from dogs to bears to dinosaurs. Collect the most powerful animals to defeat the evil minions of Dr. Llama!
+					</p>
+					<p>
+						Not only can you journey through the wide world in adventure mode - you can test your battle skills and get to meet new animals with Minigames, which are quick 5-on-5 death matches.
+					</p>
+				</div>
+				<div id="tabs-shortcuts">
+					<table id="help-keyboard-shortcuts">
+						<tr>
+							<td>Up</td>
+							<td>Move/attack up</td>
+						</tr>
+						<tr>
+							<td>Down</td>
+							<td>Move/attack down</td>
+						</tr>
+						<tr>
+							<td>Left</td>
+							<td>Move/attack left</td>
+						</tr>
+						<tr>
+							<td>Right</td>
+							<td>Move/attack right</td>
+						</tr>
+						<tr>
+							<td>End</td>
+							<td>Skip turn</td>
+						</tr>
+						<tr>
+							<td>Alt</td>
+							<td>Displays the HP percent of each team member.</td>
+						</tr>
+						<tr>
+							<td>Ctrl</td>
+							<td>Causes the selected team member to use its ability.</td>
+						</tr>
+					</table>
+				</div>
+				<div id="tabs-contact">
+					Questions? Comments? Email Neel at <a href="mailto:neel@hathix.com">neel@hathix.com</a>.
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+  <!--<script src="js/libs/jquery-1.7.1-min.js"></script>-->
+
+
+  <!-- scripts concatenated and minified via ant build script-->
+  <script src="js/libs/jquery-ui-1.8.13.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/mylibs/sugar-1.2.5-custom.min.js"></script>
+  <script src="js/mylibs/graph.js"></script>
+  <script src="js/mylibs/astar.js"></script>
+  <!--<script defer src="js/script.js"></script>-->
+
+
+    <!--<script defer src="minify-js/script.min.js"></script>-->
+	<script defer src="js/utils.js"></script>
+	<script defer src="js/assorted_objects.js"></script>
+	<script defer src="js/coords.js"></script>
+	<script defer src="js/constants.js"></script>
+	<script defer src="js/global_vars.js"></script>
+	<script defer src="js/abilities.js"></script>
+	<script defer src="js/stat_db.js"></script>
+	<script defer src="js/gridobject.js"></script>
+	<script defer src="js/obstacle.js"></script>
+	<script defer src="js/animal.js"></script>
+	<script defer src="js/enemy.js"></script>
+	<script defer src="js/ally.js"></script>
+	<script defer src="js/getobject.js"></script>
+	<script defer src="js/tile.js"></script>
+	<script defer src="js/level.js"></script>
+	<script defer src="js/save_load.js"></script>
+	<script defer src="js/minigame.js"></script>
+	<script defer src="js/main.js"></script>
+	<script defer src="js/start.js"></script>
+	<script defer src="js/act1.js"></script>
+	<script defer src="js/act2.js"></script>
+	<script defer src="js/act3.js"></script>
+	<script defer src="js/act4.js"></script>
+	<script defer src="js/act5.js"></script>
+  <!-- end scripts-->
+
+		<!-- Start Piwik Tracking Tag -->
+		<script defer async type="text/javascript">
+			var pkBaseURL = (("https:" == document.location.protocol) ? "https://hathix.com/piwik/" : "http://hathix.com/piwik/");
+			document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+
+		</script>
+		<script type="text/javascript">
+			try {
+				var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+				piwikTracker.trackPageView();
+				piwikTracker.enableLinkTracking();
+			} catch( err ) {
+			}
+		</script>
+		<noscript>
+			<p><img src="http://hathix.com/piwik/piwik.php?idsite=1" style="border:0" alt="" />
+			</p>
+		</noscript>
+		<!-- End Piwik Tracking Tag -->
+
+
+  <!-- Prompt IE 6/7 users to install Chrome Frame. Remove this if you want to support IE 6/7.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 8 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+
+</body>
+</html>

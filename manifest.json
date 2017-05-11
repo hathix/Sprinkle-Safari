@@ -1,0 +1,39 @@
+{
+  "name": "Sprinkle Safari",
+  "version": "0.1.0",
+
+  "description": "Save the world's donuts by teaming up with animals spanning the wide world!",
+  "icons": { 
+  	"16":	"images/icons/icon16.png",
+  	"48":	"images/icons/icon48.png",
+  	"128":	"images/icons/icon128.png",
+  	},
+  "default_locale": "en",
+
+  "//browser_action": {...},
+  "//page_action": {...},
+  "//theme": {...},
+  "app": {
+  	"launch": {
+  		"web_url": "http://hathix.com/games/sprinkle_safari",
+  		},
+  	},
+
+  "//background_page": "aFile.html",
+  "//chrome_url_overrides": {...},
+  "//content_scripts": [...],
+  "content_security_policy": "default-src 'self' https://hathix.com",
+  "//file_browser_handlers": [...],
+  "homepage_url": "http://hathix.com/games/sprinkle_safari",
+  "//incognito": "spanning" or "split",
+  "//key": "publicKey",
+  "minimum_chrome_version": "15",
+  "//nacl_modules": [...],
+  "offline_enabled": true,
+  "omnibox": { "keyword": "sprinkle" },
+  "//options_page": "aFile.html"
+  "//permissions": [...],
+  "//plugins": [...],
+  "//requirements": {...},
+  "//update_url": "http://path/to/updateInfo.xml"
+}

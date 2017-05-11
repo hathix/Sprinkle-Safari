@@ -1,0 +1,449 @@
+body{
+	font-family: 'Lao UI', 'Segoe UI', Calibri, 'Trebuchet MS', Georgia, sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+div#all{
+	margin: auto;
+	padding: 0;
+	position: relative;
+	top: 35px;
+}
+
+#startscreen{
+	/*display: none !important;*/
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	background-color: #FFF; /* block out stuff behind (the map) */
+	background-image: url(images/tiles/translucent/grass.png);
+}
+
+#splash{
+	position: relative;
+	width: 500px;
+	height: 260px;
+	background-image: url(images/non-game/splash.png);
+}
+
+#main-menu{
+	/* splash screen, intro screen */
+	position: relative;
+	width: 500px;
+	height: 500px;
+	background-image: url(images/tiles/grass.png);
+	margin: auto;
+}
+
+#main-menu-buttons{
+	position: relative;
+	text-align: center;
+	margin: auto;
+}
+
+#main-menu-buttons td{
+	width: 150px;
+	padding: 5px;
+}
+
+#main-menu-buttons button{
+	width: 100%;
+}
+
+#header-background{
+	position: absolute;
+	width: 100%;
+	height: 30px;
+	/* Generated with ColorZilla Gradient Editor */
+	background: rgb(125,126,125);
+	background: -moz-linear-gradient(top, rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1)));
+	background: -webkit-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: -o-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	background: -ms-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );
+	background: linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%);
+}
+
+#header-content{
+	color: #EFEFEF;
+	height: 30px;
+	width: 950px;
+	margin: auto;
+	line-height: 30px;
+}
+
+#help-dialog{
+	padding: 10px;
+}
+
+#help-tabs>div{
+	height: 380px;
+	overflow: scroll;
+}
+
+#game-over-dialog, #minigame-win-dialog{
+	text-align: center;
+}
+
+/* MINIGAME */
+#minigame-stages{
+	width: 450px;	
+}
+
+.minigame-thumbnail{
+	width: 100px;
+	height: 100px;
+	margin: 5px;
+	cursor: pointer;
+}
+
+#minigames-num-won{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+/* background table goes here, as does the stuff on grid holder */
+#background_holder{
+	width: 600px;
+	height: 600px;
+	position: relative;
+	float: left;
+}
+
+/* any enemies, coins, friends on grid stay here 
+   basically just an overlay of background_holder and background */
+#board{
+	width: 600px;
+	height: 600px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}
+
+/* any gridobject or you uses an image like this */
+#board div{
+	position: absolute; /* allows for it to overlay background_holder */
+	width: 40px; /* scale it down if necessary, although scaling the image itself is better */
+	height: 40px;
+	/* for smooth movements */
+	/*transition: top 0.3s, left 0.3s;
+	-webkit-transition: top 0.3s, left 0.3s;
+	-moz-transition: top 0.3s, left 0.3s;
+	-o-transition: top 0.3s, left 0.3s;
+	transition-timing-function: linear;
+	-webkit-transition-timing-function: linear;
+	-moz-transition-timing-function: linear;
+	-o-transition-timing-function: linear;*/
+	/* top and left are set by the javascript */
+}
+
+#board img{
+	width: 40px;
+	height: 40px;
+}
+
+/* the background (tiles) goes in this table */
+#background{
+	width: 600px; /* 15 * 40, for 15 tiles of 30px each */
+	height: 600px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+#background td{
+	width: 39px;
+	height: 39px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+/* other view stuff */
+#all{
+	/* everything in this part of the page */
+	width: 950px;
+}
+
+#sidestuff{
+	float: right;
+	width: 330px;
+	margin-left: 20px;
+	position: relative;
+}
+
+/* arrows */
+#arrows{
+	position: absolute;
+	top: 350px;
+	text-align: center;
+	border-radius: 5px;
+	/*font-style: italic;*/
+	font-size: 85%;
+}
+
+#arrows input[type='image']{
+	min-width: 48px;
+	height: 48px;
+	font-weight: bold;
+	font-size: 130%;
+	opacity: 0.8;
+	border-radius: 3px;
+}
+
+#arrows input[type='image']:hover{
+	opacity: 1.0;
+}
+
+#arrows input[type='image']:active{
+
+}
+
+#skip-turn{
+	position: absolute;
+	top: 480px;
+}
+
+/* arrow rotation classes */
+.Up{
+	transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+}
+
+.Right{
+	transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+}
+
+.Down{
+	transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+}
+
+.Left{
+	transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
+	-webkit-transform: rotate(270deg);
+	-o-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+}
+
+/* log */
+#log{
+	height: 260px;
+	width: 220px;
+	margin-top: 5px;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 5px;
+	overflow: auto;
+}
+
+.log_entry{
+	padding: 2px;
+	margin: 2px;
+	border: 1px solid black;	
+	border-radius: 3px;
+}
+
+/* special log entry classes */
+.info{
+	background-color: #B5B5FF;
+	font-weight: bold;
+}
+
+.urgent{
+	background-color: #FFCC00;
+	font-weight: bold;
+}
+
+.heal{
+	background-color: #A5FF7F;
+}
+
+.attack-ally{
+	background-color: #FF7777;
+}
+
+.attack-enemy{
+	background-color: #FFBABA;
+}
+
+.die{
+	background-color: #000000;
+	color: #FFFFFF;
+	font-weight: bold;
+}
+
+.defeat{
+	background-color: #CE1313;
+	color: #FFFFFF;
+}
+
+.recruit{
+	background-color: #FFEE9B;
+	font-weight: bold;
+}
+
+.levelup{
+	background-color: #009110;
+	color: #FFFFFF;
+}
+
+.ability{
+	background-color: #FF7F30;
+}
+
+.ability-error{
+	background-color: #FF9B56;
+}
+
+/* general */
+.hidden{
+	display: none;
+}
+
+.invisible{
+	opacity: 0;
+}
+
+
+button{
+	font-size: 16px !important;
+}
+
+
+/* dialogue */
+#dialogue{
+	display: none;
+	background: rgba(255,255,255,0.5);
+	position: absolute;
+	bottom: 100px;
+	left: 90px;
+	width: 400px;
+	min-height: 100px;
+	padding: 10px;
+	z-index: 10;
+	border: 1px solid black;
+	border-radius: 10px;
+	box-shadow: 0 0 10px 3px #888;
+	-webkit-box-shadow: 0 0 10px 3px #888;	
+}
+
+#dialogue_image{
+	vertical-align: middle;
+}
+
+#dialogue_name{
+	font-weight: bold;
+	font-size: 120%;
+}
+
+#dialogue_text{
+	margin: 5px;
+}
+
+#dialogue_name:after{
+	content: ':';
+}
+
+#dialogue_next_button{
+
+}
+
+#dialogue_close_button{
+
+}
+
+.dialogue-ally{
+	background: rgba(200,255,200,0.5) !important;
+}
+
+.dialogue-enemy{
+	background: rgba(255,200,200,0.5) !important;
+}
+
+.dialogue-neutral{
+	background: rgba(200,200,255,0.5) !important;
+}
+
+.dialogue-sign{
+	background: rgba(255,255,200,0.5) !important;
+}
+
+/* assorted */
+
+.selected{
+	background-image: url('images/backgrounds/selected-bg.png') !important;
+}
+
+.ally{
+	/* normal ally */
+	background-image: url('images/backgrounds/ally-background.png');
+	cursor: pointer;
+	z-index: 7 !important;
+}
+
+.enemy{
+	/* any enemy */
+	background-image: url('images/backgrounds/enemy-bg.png');
+	z-index: 6 !important;
+}
+
+.obstacle{
+	z-index: 5;
+}
+
+.breaker{
+	clear: both;
+}
+
+
+.ui-progressbar span{
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	margin: auto;
+	line-height: 15px;
+	font-size: 13px;
+}
+
+
+/* tooltip */
+
+.ui-tooltip-hoverstats{
+	/* hovering stats */
+	font-size: 16px !important;
+	line-height: 18px !important;
+	width: 220px;
+	opacity: 0.8;
+}
+
+.ui-tooltip-hoverstats table{
+	
+}
+
+.ui-tooltip-hoverstats button{
+	font-size: 14px;
+	margin: 5px;
+}
+
+.ui-tooltip-damage{
+	opacity: 0.8 !important;
+	text-align: center !important;
+}
