@@ -1,0 +1,270 @@
+
+/* background table goes here, as does the stuff on grid holder */
+#background_holder{
+	width: 600px;
+	height: 600px;
+	position: relative;
+	float: left;
+}
+
+/* any enemies, coins, friends on grid stay here 
+   basically just an overlay of background_holder and background */
+#stuff_on_grid{
+	width: 600px;
+	height: 600px;
+	position: absolute;
+	z-index: 1;
+}
+
+/* any gridobject or you uses an image like this */
+#stuff_on_grid div{
+	position: absolute; /* allows for it to overlay background_holder */
+	width: 40px; /* scale it down if necessary, although scaling the image itself is better */
+	height: 40px;
+	/* for smooth movements */
+	transition: top 0.3s, left 0.3s;
+	-webkit-transition: top 0.3s, left 0.3s;
+	-moz-transition: top 0.3s, left 0.3s;
+	-o-transition: top 0.3s, left 0.3s;
+	/* default is ease, we want linear */
+	transition-timing-function: linear;
+	-webkit-transition-timing-function: linear;
+	-moz-transition-timing-function: linear;
+	-o-transition-timing-function: linear;
+	/* top and left are set by the javascript */
+}
+
+#stuff_on_grid img{
+	width: 40px;
+	height: 40px;
+}
+
+/* the background goes in this table */
+#background{
+	width: 600px; /* 15 * 40, for 15 tiles of 30px each */
+	height: 600px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+#background td{
+	width: 39px;
+	height: 39px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+/* other view stuff */
+#all{
+	/* everything in this part of the page */
+	font-family: "Lao UI",Calibri,Ubuntu,Verdana,Arial,sans-serif;
+	width: 950px;
+}
+
+#sidestuff{
+	float: right;
+	width: 330px;
+	margin-left: 20px;
+	position: relative;
+}
+
+/* buttons */
+.buttons{
+	position: absolute;
+	text-align: center;
+	border-radius: 5px;
+	/*font-style: italic;*/
+	font-size: 85%;
+}
+
+.buttons input[type='image']{
+	min-width: 48px;
+	height: 48px;
+	font-weight: bold;
+	font-size: 130%;
+	opacity: 0.8;
+}
+
+.buttons input[type='image']:hover{
+	opacity: 1.0;
+}
+
+.buttons input[type='image']:active{
+
+}
+
+#move_buttons{
+	top: 480px;
+	background-color: #C4FFAA;
+}
+
+#attack_buttons{
+	top: 350px;
+	background-color: #FFC4C4;	
+}
+
+/* log */
+#log{
+	position: absolute;
+	top: 180px;
+	height: 130px;
+	width: 190px;
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 5px;
+	overflow: auto;
+}
+
+.log_standard{
+	background-color: #FFF;
+}
+
+.log_alternate{
+	background-color: #CCC;
+}
+
+/* dialogue */
+#dialogue{
+	display: none;
+	position: absolute;
+	top: 20px;
+	left: 90px;
+	width: 400px;
+	min-height: 100px;
+	padding: 10px;
+	z-index: 10;
+	border: 1px solid black;
+	border-radius: 10px;
+	box-shadow: 0 0 10px 3px #888;
+	-webkit-box-shadow: 0 0 10px 3px #888;	
+}
+
+#dialogue_speaker{
+	font-weight: bold;
+}
+
+#dialogue_speaker:after{
+	content: ':';
+}
+
+#dialogue_next_button{
+	padding: 5px;
+}
+
+#dialogue_close_button{
+
+}
+
+/* storyline */
+#storyline{
+	display: none;
+	position: absolute;
+	width: 80%;
+	height: 80%;
+	top: 5%;
+	left: 5%;
+	padding: 5%;
+	background-color: white;
+	border: 2px solid #444444;
+	border-radius: 10px;
+	box-shadow: 0 0 10px 3px #888;
+	-webkit-box-shadow: 0 0 10px 3px #888;		
+}
+
+/* hover info */
+#hover_info{
+	display: none;
+	width: 200px;
+	border: 1px solid #AAA;
+	border-radius: 10px;
+	padding: 5px;
+}
+
+.ally_info{
+	background-color: #70FF70;
+	background:-webkit-gradient(linear, left top, left bottom, from(#70FF70), to(#2AFF2A));
+	background:-moz-linear-gradient(top,#70FF70,#2AFF2A);	
+}
+
+.enemy_info{
+	background-color: #FF7070;
+	background:-webkit-gradient(linear, left top, left bottom, from(#FF7070), to(#FF2A2A));
+	background:-moz-linear-gradient(top,#FF7070,#FF2A2A);	
+}
+
+.neutral_info{
+	background-color: #7070FF;
+	background:-webkit-gradient(linear, left top, left bottom, from(#7070FF), to(#2A2AFF));
+	background:-moz-linear-gradient(top,#7070FF,#2A2AFF);
+}
+
+.portrait{ /* #hover_info */
+	display: block;
+	float: left;
+	vertical-align: middle;
+	margin: 3px;
+	border: 1px solid #000;
+	border-radius: 4px;
+	padding: 3px;
+	background-color: #FFF;
+}
+
+#hover_name{
+	font-weight: bold;
+}
+
+#hover_hp{
+	width: 100px;
+	height: 10px;
+	background-color: white;
+}
+
+#hover_stat_table{
+	text-align: center;
+}
+
+#hover_stat_table td{
+	width: 33%;
+}
+
+#hover_head_row{
+	font-weight: bold;
+}
+
+#hover_stat_row{
+
+}
+
+/* assorted */
+
+.selected_ally{
+	/* selected ally */
+	background-image: url('images/backgrounds/selected_bg.png');
+}
+
+.ally{
+	/* normal ally */
+	background-image: url('images/backgrounds/ally_background.png');
+}
+
+.selected_ally, .ally{
+	/* any ally */
+	cursor: pointer;
+}
+
+.enemy{
+	/* any enemy */
+	background-image: url('images/backgrounds/enemy_bg.png');
+}
+
+.selected_ally, .ally, .enemy{
+	/* any animal */
+	z-index: 5;
+}
+
+.breaker{
+	clear: both;
+}

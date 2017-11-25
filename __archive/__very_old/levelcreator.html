@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+<head>
+
+	<title>Sprinkle Safari Level Creator</title>
+
+	<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+	<style type="text/css">
+		div#all{
+			width: 1000px;
+		}
+		
+		table#background td{
+			border: 1px solid black;
+		}
+		
+		div#stuff_on_grid{
+			width: 1px;
+			height: 1px;/* at least for now */
+		}
+		
+		div#tiles img{
+			/* these pictures can be clicked on to set active picture */
+			width: 40px;
+			cursor: pointer;
+			margin-bottom: 5px;
+		}
+		
+		div#stuff img{
+			width: 40px;	
+			margin-bottom: 5px;			
+		}
+		
+		textarea{
+			font-size: 12px;
+			font-family: "DejaVu Sans Mono", "Courier New", Courier, monospace;		
+		}
+		
+		textarea#pasted_commands{
+			width: 150px;
+			height: 300px;
+		}
+		
+		#pap_commands{
+			width: 150px;
+			height: 50px;
+		}
+		
+		td{
+			opacity: 0.6;
+			background: url('images/tiles/grass.png');
+		}
+		
+		td.selected{
+			opacity: 1;
+		}
+		
+		td.unselected{
+			opacity: 0.6;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		
+		//vars
+		const TILE_FOLDER ="images/tiles/";
+		const IMAGE_FOLDER = "images/";
+		
+		var activeSquare = null;
+			
+		function get(id){
+			return document.getElementById(id);
+		}		
+			
+		/**
+			Turns a into 10, b into 11, etc.
+		*/
+		function convert(chr){
+			switch(chr){
+				case 'a':
+					return 10;
+				case 'b':
+					return 11;
+				case 'c':
+					return 12;
+				case 'd':
+					return 13;
+				case 'e':
+					return 14;
+				default:
+					return parseInt(chr); //it's 0-9
+			}
+		}
+		
+		window.onload = function(){
+			//get each td
+			var cells = document.getElementsByTagName("td");
+			for(var i=0;i<cells.length;i++){
+				var cell = cells[i];
+				//give it a tooltip of its x and y coords
+				cell.title = "x: " + convert(cell.id.substr(1,1)) + ", y: " + convert(cell.id.substr(0,1));
+				cell.onclick = function(event){
+					setActiveSquare(this);
+				}
+			}
+			
+			//reset text in textarea to a default
+			get("pasted_commands").value = "";		
+			get("pap_commands").value = "";
+		}
+		
+		/**
+			Makes the given square of the background active, or not transparent. When an object is clicked, this gets the object put into it.
+		*/
+		function setActiveSquare(cell){
+			if(activeSquare)
+				activeSquare.className = "unselected";
+			activeSquare = cell;
+			cell.className = "selected";
+		}
+		
+		function getInput(text,def){
+			var result;
+			do{
+				result = prompt(text,def);
+			} while (!result);
+			
+			return result;
+		}
+		
+		/**
+			Places an ally (starting position).
+		*/
+		function placeAlly(){
+			if(!activeSquare) return;
+
+			//y and x used in a bit... they're the x and y locations (not absolute locations) of the objects
+			var y = convert(activeSquare.id.substr(0,1));
+			var x = convert(activeSquare.id.substr(1,1));
+			
+			var text = "[" + x + "," + y + "],";
+			
+			activeSquare.style.background = "#8CDE21 url('images/animals/elephant.png')";
+
+			get("pap_commands").value = get("pap_commands").value + text + "\n"; //tack it on
+		}
+		
+		/**
+			Puts an object in the active cell
+			@param object the image that should be pasted into the cell
+		*/	
+		function putObject(object){
+			if(!activeSquare) return; //no square is active, so forget about it
+			//put the object's background into the active square
+			
+			//y and x used in a bit... they're the x and y locations (not absolute locations) of the objects
+			var y = convert(activeSquare.id.substr(0,1));
+			var x = convert(activeSquare.id.substr(1,1));
+			
+			var image = ""; //path to image
+			
+			//paste command into text span
+			var text = "";
+			//first find the appropriate text
+			//the text can be tweaked slightly by the level creating person and then added to the levels.js file
+			switch(object.id){
+				case "enemy":
+					var enemyName = getInput("What is the enemy's name?","Squirrel");
+					var level = getInput("What is the enemy's level?","1");
+					text = 'makeEnemy("' + enemyName + '",' + x + ',' + y + ',' + level + '),';
+					image = "images/animals/" + enemyName;
+					break;
+				case "obstacle":
+					var type = getInput("What type is the obstacle?","tree");
+					text = 'makeObstacle(' + x + ',' + y + ',"' + type + '"),';
+					image = "images/obstacles/" + type;
+					break;
+				case "steppable":
+					var type = getInput("What type is the steppable?","path");
+					text = 'makeSteppable(' + x + ',' + y + ',"' + type + '"),';
+					image = "images/tiles/" + type;
+					break;
+				case "heart":
+					var type = getInput("How full is the heart? (full, quarter, half)","full");
+					text = 'makeHeart(' + x + ',' + y + ',"' + type + '"),';
+					image = "images/powerups/" + type + "_heart";
+					break;					
+				case "water":
+					text = 'makeObstacle(' + x + ',' + y + ',"water"),';
+					image = 'images/obstacles/water';
+				/*case "coin":
+					while(true){
+						var coinColor = prompt("What color is the coin?","red");
+						if(coinColor) break;
+					}
+					text = 'createCoin(' + y + ',' + x + ',"'+coinColor+'"),';
+					break;
+				case "heart":
+					text = 'createHeart(' + y + ',' + x + '),';
+					break;
+				case "friend":
+					while(true){
+						var friendName = prompt("What kind of animal is the friend?","cow");
+						if(friendName) break;
+					}
+					text = 'createFriend(' + y + ','+x +',"'+friendName+'"),';
+					break;
+				case "shield":
+					while(true){
+						var shieldType = prompt("What kind of shield is it?","wooden");
+						if(shieldType) break;
+					}
+					text = 'createShield(' + y + ','+x +',"'+shieldType+'"),';
+					break;
+				case "clock":
+					text = 'createClock(' + y + ',' + x + '),';
+					break;
+				case "levelend":
+					text = 'createLevelEnd(' + y + ',' + x + '),';*/
+			}
+			
+			image += ".png";
+			activeSquare.style.background = "#8CDE21 url('" + image + "')";			
+			
+			get("pasted_commands").value = get("pasted_commands").value + text + "\n"; //tack it on
+		}		
+			
+	</script>
+</head>
+<body>
+	<div id="all">
+		<div id="background_holder">
+				<div id="stuff_on_grid"></div>
+			<table id="background">
+				<tr><td id='00'></td><td id='01'></td><td id='02'></td><td id='03'></td><td id='04'></td><td id='05'></td><td id='06'></td><td id='07'></td><td id='08'></td><td id='09'></td><td id='0a'></td><td id='0b'></td><td id='0c'></td><td id='0d'></td><td id='0e'></td></tr><tr><td id='10'></td><td id='11'></td><td id='12'></td><td id='13'></td><td id='14'></td><td id='15'></td><td id='16'></td><td id='17'></td><td id='18'></td><td id='19'></td><td id='1a'></td><td id='1b'></td><td id='1c'></td><td id='1d'></td><td id='1e'></td></tr><tr><td id='20'></td><td id='21'></td><td id='22'></td><td id='23'></td><td id='24'></td><td id='25'></td><td id='26'></td><td id='27'></td><td id='28'></td><td id='29'></td><td id='2a'></td><td id='2b'></td><td id='2c'></td><td id='2d'></td><td id='2e'></td></tr><tr><td id='30'></td><td id='31'></td><td id='32'></td><td id='33'></td><td id='34'></td><td id='35'></td><td id='36'></td><td id='37'></td><td id='38'></td><td id='39'></td><td id='3a'></td><td id='3b'></td><td id='3c'></td><td id='3d'></td><td id='3e'></td></tr><tr><td id='40'></td><td id='41'></td><td id='42'></td><td id='43'></td><td id='44'></td><td id='45'></td><td id='46'></td><td id='47'></td><td id='48'></td><td id='49'></td><td id='4a'></td><td id='4b'></td><td id='4c'></td><td id='4d'></td><td id='4e'></td></tr><tr><td id='50'></td><td id='51'></td><td id='52'></td><td id='53'></td><td id='54'></td><td id='55'></td><td id='56'></td><td id='57'></td><td id='58'></td><td id='59'></td><td id='5a'></td><td id='5b'></td><td id='5c'></td><td id='5d'></td><td id='5e'></td></tr><tr><td id='60'></td><td id='61'></td><td id='62'></td><td id='63'></td><td id='64'></td><td id='65'></td><td id='66'></td><td id='67'></td><td id='68'></td><td id='69'></td><td id='6a'></td><td id='6b'></td><td id='6c'></td><td id='6d'></td><td id='6e'></td></tr><tr><td id='70'></td><td id='71'></td><td id='72'></td><td id='73'></td><td id='74'></td><td id='75'></td><td id='76'></td><td id='77'></td><td id='78'></td><td id='79'></td><td id='7a'></td><td id='7b'></td><td id='7c'></td><td id='7d'></td><td id='7e'></td></tr><tr><td id='80'></td><td id='81'></td><td id='82'></td><td id='83'></td><td id='84'></td><td id='85'></td><td id='86'></td><td id='87'></td><td id='88'></td><td id='89'></td><td id='8a'></td><td id='8b'></td><td id='8c'></td><td id='8d'></td><td id='8e'></td></tr><tr><td id='90'></td><td id='91'></td><td id='92'></td><td id='93'></td><td id='94'></td><td id='95'></td><td id='96'></td><td id='97'></td><td id='98'></td><td id='99'></td><td id='9a'></td><td id='9b'></td><td id='9c'></td><td id='9d'></td><td id='9e'></td></tr><tr><td id='a0'></td><td id='a1'></td><td id='a2'></td><td id='a3'></td><td id='a4'></td><td id='a5'></td><td id='a6'></td><td id='a7'></td><td id='a8'></td><td id='a9'></td><td id='aa'></td><td id='ab'></td><td id='ac'></td><td id='ad'></td><td id='ae'></td></tr><tr><td id='b0'></td><td id='b1'></td><td id='b2'></td><td id='b3'></td><td id='b4'></td><td id='b5'></td><td id='b6'></td><td id='b7'></td><td id='b8'></td><td id='b9'></td><td id='ba'></td><td id='bb'></td><td id='bc'></td><td id='bd'></td><td id='be'></td></tr><tr><td id='c0'></td><td id='c1'></td><td id='c2'></td><td id='c3'></td><td id='c4'></td><td id='c5'></td><td id='c6'></td><td id='c7'></td><td id='c8'></td><td id='c9'></td><td id='ca'></td><td id='cb'></td><td id='cc'></td><td id='cd'></td><td id='ce'></td></tr><tr><td id='d0'></td><td id='d1'></td><td id='d2'></td><td id='d3'></td><td id='d4'></td><td id='d5'></td><td id='d6'></td><td id='d7'></td><td id='d8'></td><td id='d9'></td><td id='da'></td><td id='db'></td><td id='dc'></td><td id='dd'></td><td id='de'></td></tr><tr><td id='e0'></td><td id='e1'></td><td id='e2'></td><td id='e3'></td><td id='e4'></td><td id='e5'></td><td id='e6'></td><td id='e7'></td><td id='e8'></td><td id='e9'></td><td id='ea'></td><td id='eb'></td><td id='ec'></td><td id='ed'></td><td id='ee'></td></tr>				
+			</table>
+		</div>
+		
+		<div id="sidestuff">
+			
+			<br /><br />
+			<!-- for the stuff on the grid -->
+			<div id="stuff">
+				<img src="images/animals/squirrel.png" id="enemy" onclick="putObject(this)" />
+				<img src="images/obstacles/tree.png" id="obstacle" onclick="putObject(this)" />
+				<img src="images/tiles/path.png" id="steppable" onclick="putObject(this)" />
+				<br />
+				<img src="images/powerups/full_heart.png" id="heart" onclick="putObject(this)" />
+				<img src="images/obstacles/water.png" id="water" onclick="putObject(this)" />
+				<!--<img src="images/utils/coins/red_coin.png" id="coin" onclick="putObject(this)" />
+				<img src="images/utils/coins/heart.png" id="heart" onclick="putObject(this)" />				
+				<br />
+				<img src="images/friends/cow.png" id="friend" onclick="putObject(this)" />
+				<img src="images/utils/shields/woodenshield.png" id="shield" onclick="putObject(this)" />
+				<img src="images/utils/timing/moretime.png" id="clock" onclick="putObject(this)" />				
+				<br />			
+				<img src="images/utils/flag.png" id="levelend" onclick="putObject(this)" />	
+				<br />	-->
+				<p>Code for stuffOnGrid: </p>
+				<textarea id="pasted_commands"></textarea>
+				
+				<p>
+				<button onclick="placeAlly()">Put ally here</button><br />
+				Code for preferredAllyPlacement: </p>
+				<textarea id="pap_commands"></textarea>
+			</div>
+		</div>		
+	</div>
+</body>
+</html>

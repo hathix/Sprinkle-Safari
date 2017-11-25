@@ -1,0 +1,56 @@
+0.1.0 (May 1, 2011):
+	Things show up on the board.
+	
+0.1.1 (May 1, 2011):
+	Enemies and teammates support added.
+	
+0.1.2 (May 1, 2011):
+	Moving added.
+
+0.2.0 (May 2, 2011):
+	AI added.
+	
+0.2.1 (May 2, 2011):
+	Fighting added.
+	
+0.2.2 (May 2, 2011):
+	Huge rendering optimization (all background tiles are the same, obstacles are grid objects.)
+	Added more animals.
+	Improved fighting algorithm.
+	Many bugfixes.
+	
+0.2.3 (May 3, 2011):
+	Added recruitment.
+	Fixed bugs.
+	Changed keyboard shortcuts: arrow keys to move, WASD to attack.
+	Added steppable grid objects.
+	Added experience.
+	
+0.3.0 (May 4, 2011):
+	Added renaming of a recruited player.
+	Improved experience algorithm.
+	Hover stats now show experience.
+	Hover stats now show HP percent.
+	Added all animals.
+	Fixed bugs.
+	Added log.
+	
+0.3.1 (May 5, 2011):
+	Added powerups: hearts.
+	Implemented dialogues.
+	Fixed bugs.
+	
+0.4.0 (May 6, 2011):
+	All the framework ready (just need to add levels.)
+	Fixed bugs.
+	Added all of Act 1.
+	
+0.4.1 (May 7, 2011):
+	Changed experience algorithm.
+	Removed level bonus for new recruits.
+	Removed a stage; only 8 stages per act.
+	Changed some enemy levels.
+	
+0.4.2 (May 9, 2011):
+	Removed unused code.
+	Changed sign/NPC dialogues to a neutral color.

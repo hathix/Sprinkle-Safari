@@ -1,0 +1,142 @@
+ <!doctype html>
+ <html>
+ <head>
+	<title>Sprinkle Safari - hathix games</title>
+	
+	<link rel="stylesheet" type="text/css" href="stylesheet.css" /> <!-- the styles for this page -->
+	<link rel="icon" type="image/png" href="images/icons/icon.png" />
+	
+	<script type="text/javascript" src="player.js"></script> <!-- player data -->
+	<script type="text/javascript" src="animal.js"></script> <!-- animal info -->
+	<script type="text/javascript" src="animal_database.js"></script> <!-- database of animal stats -->
+	<script type="text/javascript" src="main.js"></script> <!-- where most of the action happens -->
+	<script type="text/javascript" src="level_class.js"></script> <!-- the actual level class -->
+	<script type="text/javascript" src="levels.js"></script> <!-- for level creation -->	
+	<script type="text/javascript" src="gridobject.js"></script> <!-- for anything that lives on the grid -->
+	<script type="text/javascript" src="interpreter.js"></script> <!-- interprets grid and edits the bg as necessary -->	
+	<script type="text/javascript" src="move.js"></script> <!-- all the moving commands -->
+	<script type="text/javascript" src="constants.js"></script> <!-- assorted constants -->
+	<script type="text/javascript" src="movementconstants.js"></script> <!-- constants for movement -->
+	<script type="text/javascript" src="stepon.js"></script> <!-- constants for stepping on -->
+	<script type="text/javascript" src="factory.js"></script> <!-- for creating grid objects -->
+	<script type="text/javascript" src="uiupdater.js"></script> <!-- for updating the lives/points -->
+	<script type="text/javascript" src="tilemanager.js"></script> <!-- for managing the large board -->
+	<script type="text/javascript" src="utils.js"></script> <!-- random utilities -->	
+	<script type="text/javascript" src="fight.js"></script> <!-- for fighting and enemy utilities -->
+	<script type="text/javascript" src="logger.js"></script> <!-- for battle logs -->
+	<script type="text/javascript" src="dialogue.js"></script><!-- dialogues (scripts) -->
+	<script type="text/javascript" src="act1.js"></script>
+	<script type="text/javascript" src="act2.js"></script>
+	
+ </head>
+ <body>
+	<div id="all"> <!-- holds everything in the main body area -->
+		<div id="background_holder">
+				<div id="stuff_on_grid"></div>
+			<table id="background">
+				<tr><td id='00'></td><td id='01'></td><td id='02'></td><td id='03'></td><td id='04'></td><td id='05'></td><td id='06'></td><td id='07'></td><td id='08'></td><td id='09'></td><td id='0a'></td><td id='0b'></td><td id='0c'></td><td id='0d'></td><td id='0e'></td></tr><tr><td id='10'></td><td id='11'></td><td id='12'></td><td id='13'></td><td id='14'></td><td id='15'></td><td id='16'></td><td id='17'></td><td id='18'></td><td id='19'></td><td id='1a'></td><td id='1b'></td><td id='1c'></td><td id='1d'></td><td id='1e'></td></tr><tr><td id='20'></td><td id='21'></td><td id='22'></td><td id='23'></td><td id='24'></td><td id='25'></td><td id='26'></td><td id='27'></td><td id='28'></td><td id='29'></td><td id='2a'></td><td id='2b'></td><td id='2c'></td><td id='2d'></td><td id='2e'></td></tr><tr><td id='30'></td><td id='31'></td><td id='32'></td><td id='33'></td><td id='34'></td><td id='35'></td><td id='36'></td><td id='37'></td><td id='38'></td><td id='39'></td><td id='3a'></td><td id='3b'></td><td id='3c'></td><td id='3d'></td><td id='3e'></td></tr><tr><td id='40'></td><td id='41'></td><td id='42'></td><td id='43'></td><td id='44'></td><td id='45'></td><td id='46'></td><td id='47'></td><td id='48'></td><td id='49'></td><td id='4a'></td><td id='4b'></td><td id='4c'></td><td id='4d'></td><td id='4e'></td></tr><tr><td id='50'></td><td id='51'></td><td id='52'></td><td id='53'></td><td id='54'></td><td id='55'></td><td id='56'></td><td id='57'></td><td id='58'></td><td id='59'></td><td id='5a'></td><td id='5b'></td><td id='5c'></td><td id='5d'></td><td id='5e'></td></tr><tr><td id='60'></td><td id='61'></td><td id='62'></td><td id='63'></td><td id='64'></td><td id='65'></td><td id='66'></td><td id='67'></td><td id='68'></td><td id='69'></td><td id='6a'></td><td id='6b'></td><td id='6c'></td><td id='6d'></td><td id='6e'></td></tr><tr><td id='70'></td><td id='71'></td><td id='72'></td><td id='73'></td><td id='74'></td><td id='75'></td><td id='76'></td><td id='77'></td><td id='78'></td><td id='79'></td><td id='7a'></td><td id='7b'></td><td id='7c'></td><td id='7d'></td><td id='7e'></td></tr><tr><td id='80'></td><td id='81'></td><td id='82'></td><td id='83'></td><td id='84'></td><td id='85'></td><td id='86'></td><td id='87'></td><td id='88'></td><td id='89'></td><td id='8a'></td><td id='8b'></td><td id='8c'></td><td id='8d'></td><td id='8e'></td></tr><tr><td id='90'></td><td id='91'></td><td id='92'></td><td id='93'></td><td id='94'></td><td id='95'></td><td id='96'></td><td id='97'></td><td id='98'></td><td id='99'></td><td id='9a'></td><td id='9b'></td><td id='9c'></td><td id='9d'></td><td id='9e'></td></tr><tr><td id='a0'></td><td id='a1'></td><td id='a2'></td><td id='a3'></td><td id='a4'></td><td id='a5'></td><td id='a6'></td><td id='a7'></td><td id='a8'></td><td id='a9'></td><td id='aa'></td><td id='ab'></td><td id='ac'></td><td id='ad'></td><td id='ae'></td></tr><tr><td id='b0'></td><td id='b1'></td><td id='b2'></td><td id='b3'></td><td id='b4'></td><td id='b5'></td><td id='b6'></td><td id='b7'></td><td id='b8'></td><td id='b9'></td><td id='ba'></td><td id='bb'></td><td id='bc'></td><td id='bd'></td><td id='be'></td></tr><tr><td id='c0'></td><td id='c1'></td><td id='c2'></td><td id='c3'></td><td id='c4'></td><td id='c5'></td><td id='c6'></td><td id='c7'></td><td id='c8'></td><td id='c9'></td><td id='ca'></td><td id='cb'></td><td id='cc'></td><td id='cd'></td><td id='ce'></td></tr><tr><td id='d0'></td><td id='d1'></td><td id='d2'></td><td id='d3'></td><td id='d4'></td><td id='d5'></td><td id='d6'></td><td id='d7'></td><td id='d8'></td><td id='d9'></td><td id='da'></td><td id='db'></td><td id='dc'></td><td id='dd'></td><td id='de'></td></tr><tr><td id='e0'></td><td id='e1'></td><td id='e2'></td><td id='e3'></td><td id='e4'></td><td id='e5'></td><td id='e6'></td><td id='e7'></td><td id='e8'></td><td id='e9'></td><td id='ea'></td><td id='eb'></td><td id='ec'></td><td id='ed'></td><td id='ee'></td></tr>				
+			</table>
+			
+			<div id="dialogue">
+				<img id="dialogue_image" class="portrait" />
+				<span id="dialogue_speaker"></span>
+				<br />
+				<span id="dialogue_text"></span>
+				<br class="breaker" />
+				<span id="dialogue_buttons">
+					<button id="dialogue_next_button">Next</button>
+					<button id="dialogue_close_button" onclick="hideDialogue()">Close</button>
+				</span>
+			</div>
+			
+			<div id="storyline">
+			
+			</div>
+		</div>
+		
+		<div id="sidestuff">
+			<!-- javascript fills these in -->
+			<div id="hover_info">
+				<img id="hover_image" class="portrait" />
+				<span id="hover_name"></span><br />
+				<!--<canvas id="hover_hp_bar"></canvas>--><span id="hover_hp_text"></span>
+				<table id="hover_stat_table">
+					<tr id="hover_head_row">
+						<td>Level</td>
+						<td>Attack</td>
+						<td>Defense</td>
+					</tr>
+					<tr id="hover_stat_row">
+						<td id="hover_level"></td>
+						<td id="hover_attack"></td>
+						<td id="hover_defense"></td>
+					</tr>
+				</table>				
+				
+				<span id="hover_experience_wrapper">Experience: <span id="hover_experience"></span><span>
+				
+				<!--<br class="breaker" />-->
+			</div>
+			
+			<div id="log"></div>
+
+			<div class="buttons" id="attack_buttons">
+				<table>
+					<tr>
+						<td>Attack</td>
+						<td><input type="image" src="images/arrows/up.png" alt="Up" title="Up" onclick="attack(MOVE_UP)" /></td>
+						<td></td>
+					</tr>
+					<tr>					
+						<td><input type="image" src="images/arrows/left.png" alt="Left" title="Left" onclick="attack(MOVE_LEFT)" /></td>
+						<td><input type="image" src="images/arrows/down.png" alt="Down" title="Down" onclick="attack(MOVE_DOWN)" /></td>
+						<td><input type="image" src="images/arrows/right.png" alt="Right" title="Right" onclick="attack(MOVE_RIGHT)" /></td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class="buttons" id="move_buttons">
+				<table>
+					<tr>
+						<td>Move</td>
+						<td><input type="image" src="images/arrows/up.png" alt="Up" title="Up" onclick="takeTurn(MOVE_UP)" /></td>
+						<td></td>
+					</tr>
+					<tr>					
+						<td><input type="image" src="images/arrows/left.png" alt="Left" title="Left" onclick="takeTurn(MOVE_LEFT)" /></td>
+						<td><input type="image" src="images/arrows/down.png" alt="Down" title="Down" onclick="takeTurn(MOVE_DOWN)" /></td>
+						<td><input type="image" src="images/arrows/right.png" alt="Right" title="Right" onclick="takeTurn(MOVE_RIGHT)" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<select id="level_jumper">
+			<script type="text/javascript">
+				var levs = [
+					'1-1',
+					'1-2',
+					'1-3',
+					'1-4',
+					'1-5',
+					'1-6',
+					'1-7',
+					'1-8',
+					'2-1',
+					'2-2',
+				];
+				
+				for(var i=0;i<levs.length;i++){
+					var lev = levs[i];
+					var opt = document.createElement('option');
+					opt.onclick = function(){
+						loadLevel(this.innerHTML);
+					}
+					opt.innerHTML = lev;
+					
+					get("level_jumper").appendChild(opt);					
+				}
+			</script>
+		</select>
+ </body>
+ </html>
